@@ -22,7 +22,7 @@ function getFromMangaDex(seed, chapterNumbers){
 
 		resp.on('end', () => {
 			// data contains the json data gotten from the mangadex api
-			let mangaData = JSON.parse(data);
+			let mangaData = JSON.parse(data); 
 			let coverURL = "https://mangadex.org/manga" + mangaData["manga"]["cover_url"];
 			let lewd = mangaData["manga"]["hentai"]; // 0 is SFW and 1 is NSFW
 			let chapters = lewd ? ({"cover": {1: coverURL}}) : ({"cover": {0: coverURL}}); // init with cover url
@@ -53,11 +53,23 @@ function grabMangaDexChapters(jsonData, chapterSet, chapterTable){
 	let tempTable = [];
 	for (hash in jsonData){
 		let lang = jsonData[hash].lang_name;
-		if (chapterSet.has(jsonData[hash]["chapter"])){ // if you find the chapter you want
-			chapterTable[hash] = lang;
-			tempTable.append(hash); // store the hash along with its langauge
+		console.log(lang);
+		// the chater number when you get it is a string
+		if (chapterSet.has(parseInt(jsonData[hash].chapter))){
+			// chapterTable[hash] = lang;	
+			tempTable.push(hash); // store the hash along with its langauge
+		    if (lang in chapterTable){
+				chapterTable[lang][hash] = [];
+			}
+			else{
+				chapterTable[lang] = {};
+				chapterTable[lang][hash] = [];
+			}
+		    
 		}
 	}
+    console.log(chapterTable);
+	
 	// do the get requests here for the urls
 	tempTable.forEach((item) => {
 		https.get((chapterUrl + item), (resp) => {
@@ -76,6 +88,8 @@ function grabMangaDexChapters(jsonData, chapterSet, chapterTable){
 			console.log("Error while getting chapter page: ", err.message);
 		});
 	});
+	
 }
 
-getFromMangaDex(1223, [1]);
+let chapters = new Set([1, 2, 3]);
+getFromMangaDex(1223, chapters);

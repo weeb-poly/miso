@@ -1,0 +1,19 @@
+{
+  "name": "sauce-dl",
+  "version": "1.0.0",
+  "description": "Node.js code that is used for getting manga pages from sites. Used in other weeb poly projects like manga-roulette",
+  "main": "manga-dl.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/weeb-poly/sauce-dl.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/weeb-poly/sauce-dl/issues"
+  },
+  "homepage": "https://github.com/weeb-poly/sauce-dl#readme"
+}
