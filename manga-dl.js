@@ -29,9 +29,7 @@ function getFromMangaDex(seed, chapterNumbers){
 			// sets a hashtable of languages that lead to a hashmap of chapters,
 			// with links to each page in the chapter in an array
 			// ex: {English: {chapter hash: [pageUrl1, pageUrl2]} }
-			grabMangaDexChapters(mangaData.chapter, chapterNumbers, chapters);
-
-			return chapters;
+			return grabMangaDexChapters(mangaData.chapter, chapterNumbers, chapters);
 		});
 
 	}).on("error", (err) => {
@@ -51,6 +49,7 @@ usage:
 */
 function grabMangaDexChapters(jsonData, chapterSet, chapterTable){
 	let tempTable = [];
+	let returnVal;
 	for (hash in jsonData){
 		let lang = jsonData[hash].lang_name;
 		// the chater number when you get it is a string
@@ -67,11 +66,10 @@ function grabMangaDexChapters(jsonData, chapterSet, chapterTable){
 
 		}
 	}
-
 	// do the get requests here for the urls
-	tempTable.forEach((item) => {
-
+	for (let i = 0; i < tempTable.length; i++) {
 		// get the langauge for the hash
+		let item = tempTable[i];
 		let lang = "";
 		for(const language in chapterTable){
 			(item in chapterTable[language]) ? lang = language : lang = "";
@@ -90,15 +88,17 @@ function grabMangaDexChapters(jsonData, chapterSet, chapterTable){
 				pageArray.forEach((image) => {
 					chapterTable[lang][item].push(serverURL + chapterHash + "/" + image);
 				});
+				
+				if (i === tempTable.length - 1) return (chapterTable);
 				// check url if it is down or not
 				// if you cannot get a request out of it, use the backup
 			});
 		}).on("error", (err) => {
 			console.log("Error while getting chapter page: ", err.message);
 		});
-		
-	});
 
+	}
+	return chapterTable;
 }
 
 let chapters = new Set([1, 2, 3]);
