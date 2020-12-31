@@ -2,6 +2,8 @@
 const https = require('https')
 fs = require('fs');
 
+var lock = true;
+
 /*
 -- NOTE: proof of consept in node.js. For the manga roulette this would use fetch
 input: seed for manga (int), set of chapters (int)
@@ -10,10 +12,11 @@ output: returns a hashtable of of languages with a hastable of chapters and the 
 purpose: gets the approite
 usage:
 */
-function getFromMangaDex(seed, chapterNumbers){
+async function getFromMangaDex(seed, chapterNumbers){
 	let url = 'https://mangadex.org/api/manga/' + seed;
+	let retValue;
 	// get request for a random seed
-	https.get(url, (resp) => {
+	await https.get(url, (resp) => {
 		let data = '';
 		// get all the data from the chunk
 		resp.on('data', (chunk) => {
@@ -29,12 +32,18 @@ function getFromMangaDex(seed, chapterNumbers){
 			// sets a hashtable of languages that lead to a hashmap of chapters,
 			// with links to each page in the chapter in an array
 			// ex: {English: {chapter hash: [pageUrl1, pageUrl2]} }
-			return grabMangaDexChapters(mangaData.chapter, chapterNumbers, chapters);
+			console.log(chapters);
+			retValue = grabMangaDexChapters(mangaData.chapter, chapterNumbers, chapters);
+			console.log("!!!");
 		});
 
-	}).on("error", (err) => {
-		console.log("Error: " + err.message)
+		resp.on("error", (err) => {
+			console.log("Error: " + err.message)
+		});
+
 	});
+	console.log("after");
+	return retValue;
 }
 // getFromMangaDex(1223, [1]);
 
@@ -47,7 +56,7 @@ output: no return type. fills in the chapterTable with url's
 purpose:
 usage:
 */
-function grabMangaDexChapters(jsonData, chapterSet, chapterTable){
+async function grabMangaDexChapters(jsonData, chapterSet, chapterTable){
 	let tempTable = [];
 	let returnVal;
 	for (hash in jsonData){
@@ -75,26 +84,30 @@ function grabMangaDexChapters(jsonData, chapterSet, chapterTable){
 			(item in chapterTable[language]) ? lang = language : lang = "";
 		}
 
-		https.get(("https://mangadex.org/api/chapter/" + item), (resp) => {
-			let data = '';
-			resp.on('data', (chunk)=>{data += chunk;});
-			resp.on('end', () => {
-				let info = JSON.parse(data); // contains the json data
+		await https.get(("https://mangadex.org/api/chapter/" + item), (resp) => {
+				let data = '';
+				resp.on('data', (chunk)=>{data += chunk;});
+				resp.on('end', () => {
+					let info = JSON.parse(data); // contains the json data
 
-				let serverURL = info.server;
-				let pageArray = info.page_array;
-				let chapterHash = info.hash;
+					let serverURL = info.server;
+					let pageArray = info.page_array;
+					let chapterHash = info.hash;
 
-				pageArray.forEach((image) => {
-					chapterTable[lang][item].push(serverURL + chapterHash + "/" + image);
+					pageArray.forEach((image) => {
+						chapterTable[lang][item].push(serverURL + chapterHash + "/" + image);
+					});
+
+					if (i === tempTable.length - 1) {
+						console.log(chapterTable);
+						lock = false;
+						return (chapterTable);
+					}
+					// check url if it is down or not
+					// if you cannot get a request out of it, use the backup
 				});
-				
-				if (i === tempTable.length - 1) return (chapterTable);
-				// check url if it is down or not
-				// if you cannot get a request out of it, use the backup
-			});
 		}).on("error", (err) => {
-			console.log("Error while getting chapter page: ", err.message);
+				console.log("Error while getting chapter page: ", err.message);
 		});
 
 	}
