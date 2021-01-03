@@ -1,8 +1,10 @@
-// includes //
-const https = require('https')
-fs = require('fs');
 
-var lock = true;
+/** shared functions for all files**/
+
+// includes
+const https = require('https')
+fs = require('fs')
+common = require('./shared.js')
 
 /*
 -- NOTE: proof of consept in node.js. For the manga roulette this would use fetch
@@ -32,9 +34,7 @@ async function getFromMangaDex(seed, chapterNumbers){
 			// sets a hashtable of languages that lead to a hashmap of chapters,
 			// with links to each page in the chapter in an array
 			// ex: {English: {chapter hash: [pageUrl1, pageUrl2]} }
-			console.log(chapters);
 			retValue = grabMangaDexChapters(mangaData.chapter, chapterNumbers, chapters);
-			console.log("!!!");
 		});
 
 		resp.on("error", (err) => {
@@ -56,7 +56,7 @@ output: no return type. fills in the chapterTable with url's
 purpose:
 usage:
 */
-async function grabMangaDexChapters(jsonData, chapterSet, chapterTable){
+function grabMangaDexChapters(jsonData, chapterSet, chapterTable){
 	let tempTable = [];
 	let returnVal;
 	for (hash in jsonData){
@@ -84,7 +84,7 @@ async function grabMangaDexChapters(jsonData, chapterSet, chapterTable){
 			(item in chapterTable[language]) ? lang = language : lang = "";
 		}
 
-		await https.get(("https://mangadex.org/api/chapter/" + item), (resp) => {
+		https.get(("https://mangadex.org/api/chapter/" + item), (resp) => {
 				let data = '';
 				resp.on('data', (chunk)=>{data += chunk;});
 				resp.on('end', () => {
@@ -93,16 +93,13 @@ async function grabMangaDexChapters(jsonData, chapterSet, chapterTable){
 					let serverURL = info.server;
 					let pageArray = info.page_array;
 					let chapterHash = info.hash;
-
+                    // testing
 					pageArray.forEach((image) => {
 						chapterTable[lang][item].push(serverURL + chapterHash + "/" + image);
+                        // console.log("download: " + image);
+                        common.download((serverURL + chapterHash + "/" + image), (image));
 					});
 
-					if (i === tempTable.length - 1) {
-						console.log(chapterTable);
-						lock = false;
-						return (chapterTable);
-					}
 					// check url if it is down or not
 					// if you cannot get a request out of it, use the backup
 				});
@@ -114,5 +111,5 @@ async function grabMangaDexChapters(jsonData, chapterSet, chapterTable){
 	return chapterTable;
 }
 
-let chapters = new Set([1, 2, 3]);
-getFromMangaDex(1223, chapters);
+let chapters = new Set([1]);
+getFromMangaDex(314, chapters);
