@@ -112,4 +112,4 @@ function grabMangaDexChapters(jsonData, chapterSet, chapterTable){
 }
 
 let chapters = new Set([1]);
-getFromMangaDex(314, chapters);
+getFromMangaDex(8541, chapters);
