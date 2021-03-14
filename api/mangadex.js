@@ -4,7 +4,7 @@
 // includes
 const https = require('https')
 fs = require('fs')
-common = require('./shared.js')
+common = require('../shared/shared.js')
 
 /*
 -- NOTE: proof of consept in node.js. For the manga roulette this would use fetch
@@ -45,7 +45,6 @@ async function getFromMangaDex(seed, chapterNumbers){
 	console.log("after");
 	return retValue;
 }
-// getFromMangaDex(1223, [1]);
 
 /*
 -- NOTE: Due to how mangadex works, the url's provided are perishable
@@ -110,6 +109,3 @@ function grabMangaDexChapters(jsonData, chapterSet, chapterTable){
 	}
 	return chapterTable;
 }
-
-let chapters = new Set([1]);
-getFromMangaDex(8541, chapters);
