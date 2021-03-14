@@ -1,7 +1,7 @@
 // includes
 const https = require('https')
 fs = require('fs')
-common = require('./shared.js')
+common = require('../shared/shared.js')
 
 /*
 -- Note: this is just a test to see what i can get from webtoons

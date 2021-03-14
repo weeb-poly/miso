@@ -1,0 +1,15 @@
+What's done:
+  1. mangadex
+    * download any chapter from api
+TODO:
+  1. create general purpose scraping code base
+  2. create a commandline interface
+  3. different download formats (possibly build into different app)
+After Todo:
+  * Documentation & how to build
+
+
+scraping options:
+  1. selenium
+  2. **Puppiteer** (going with puppiteer)
+  3. making shim around Tachiyomi-extensions (will take a look at their code base for reference)
