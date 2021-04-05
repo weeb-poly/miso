@@ -15,12 +15,16 @@ async function xkcd(num){
 
 /*
 -- NOTE: needs to be tested
---       gets the current xkcd webcommic
+--       gets the current xkcd webcomic
 */
 async function xkcd_curr(){
   common.getFromAPI("http://xkcd.com/info.0.json", downloader);
 }
 
+/*
+-- NOTE: needs to be tested
+--       gets a random xkcd web comic
+*/
 async function xkcd_rand(){
   common.getFromAPI("http://xkcd.com/info.0.json", (jsonData) => {
     common.getFromAPI("https://xkcd.com/" + (Math.floor(Math.random(jsonData["num"]) * 100)) + "/info.0.json", (data) => {
