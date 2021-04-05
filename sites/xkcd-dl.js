@@ -5,7 +5,7 @@ common = require("../shared.js")
 function downloader(jsonData){
   let title = jsonData["safe_title"];
   let img = jsonData["img"];
-  commond.download(img, title);
+  common.download(img, title);
 }
 
 async function xkcd(num){
@@ -19,4 +19,12 @@ async function xkcd(num){
 */
 async function xkcd_curr(){
   common.getFromAPI("http://xkcd.com/info.0.json", downloader);
+}
+
+async function xkcd_rand(){
+  common.getFromAPI("http://xkcd.com/info.0.json", (jsonData) => {
+    common.getFromAPI("https://xkcd.com/" + (Math.floor(Math.random(jsonData["num"]) * 100)) + "/info.0.json", (data) => {
+      common.download(data["img"], data["title"]);
+    });
+  });
 }
