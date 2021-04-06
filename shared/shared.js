@@ -48,3 +48,26 @@ function download(url, imagename){
 	});
 }
 module.exports = { download };
+
+/*
+-- NOTE: untested, still need to test
+-- 			 ment to be a general purpose API get function
+-- 			 mostly just Mangadex and XKCD
+*/
+async function getFromAPI(apiendpoint, callback){
+	await https.get(apiendpoint, (resp) => {
+		let data = '';
+		resp.on("data", (chunk) =>{
+			data += chunk;
+		});
+		resp.on("end", () => {
+				let jsonData = JSON.parse(data);
+				callback(jsonData);
+		});
+
+		resp.on("error", (err) => {
+			console.log("Error: " + err.message);
+		});
+	});
+}
+module.exports = { getFromAPI };

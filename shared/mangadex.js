@@ -4,7 +4,7 @@
 // includes
 const https = require('https')
 fs = require('fs')
-common = require('../shared/shared.js')
+common = require('shared.js')
 
 /*
 -- NOTE: proof of consept in node.js. For the manga roulette this would use fetch

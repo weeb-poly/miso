@@ -6,11 +6,18 @@ Miso is a project for archiving graphic novels, particularly manga pages from si
 Goals: 
 **Goals:**
 
-- [ ] reorganize code base
+- [X] reorganize code base
     - [X] In process
-- [ ] Add new sites to the list
+    - [X] More or less done
+- [X] Add new sites to the list
+    - [ ] In the process, check dev log and issues
 - [ ] Different Download options
-- [ ] Add CLI interface
+- [X] Add CLI interface
+    - [ ] In the process
+
+## How to contribute:
+
+Check the wiki: https://github.com/weeb-poly/miso/wiki#how-to-contribute 
 
 ## requirements:
 node.js packages *https* and *fs*. these should come standard for most versions of node.
