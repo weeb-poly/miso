@@ -2,6 +2,7 @@
 
 // includes
 const https = require('https')
+const puppeteer = require('puppeteer-core');
 fs = require('fs')
 
 
@@ -71,3 +72,31 @@ async function getFromAPI(apiendpoint, callback){
 	});
 }
 module.exports = { getFromAPI };
+
+/*
+-- NOTE: untested
+-- 			 start of scraping with puppeteer
+*/
+
+async function scrapeTags(url, tags, callback){
+
+}
+
+/*
+-- NOTE: untested
+-- 			 gets all the html from the
+*/
+async function grabHTML(){
+	try{
+		const browser = await puppeteer.launch();
+		const [page] = await browser.pages();
+
+	} catch (err) {
+
+	}
+
+}
+
+async function grabAllImgTags(){
+
+}
