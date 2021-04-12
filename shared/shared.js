@@ -2,6 +2,7 @@
 
 // includes
 const https = require('https')
+const puppeteer = require('puppeteer-core');
 fs = require('fs')
 
 
@@ -71,3 +72,34 @@ async function getFromAPI(apiendpoint, callback){
 	});
 }
 module.exports = { getFromAPI };
+
+/*
+-- NOTE: untested
+-- 			 start of scraping with puppeteer
+*/
+
+async function searchPageFor(url, evaluate , callback){
+	try{
+		const browser = await puppeteer.launch();
+		const [page] = await browser.pages();
+
+				await page.goto(url, {waitUntil: 'networkidle0'});
+				// old thing: get rid of
+				// const data = await page.evaluate(() => document.querrySelectorAll(tags).outerHTML);
+				const data = await page.evaluate(evaluate);
+				callback(data);
+
+				await browser.close();
+
+	} catch (err) {
+
+	}
+}
+
+/*
+-- NOTE: untested
+--       gets all the html from the
+*/
+async function grabHTML(url, callback){
+	await searchPageFor(url, "*", callback);
+}

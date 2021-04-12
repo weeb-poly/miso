@@ -10,7 +10,7 @@ function downloader(jsonData){
 
 async function xkcd(num){
   let url = "https://xkcd.com/" + num + "/info.0.json";
-  common.getFromAPI(url, downloader);
+  await common.getFromAPI(url, downloader);
 }
 
 /*
@@ -18,7 +18,7 @@ async function xkcd(num){
 --       gets the current xkcd webcomic
 */
 async function xkcd_curr(){
-  common.getFromAPI("http://xkcd.com/info.0.json", downloader);
+  await common.getFromAPI("http://xkcd.com/info.0.json", downloader);
 }
 
 /*
@@ -26,7 +26,7 @@ async function xkcd_curr(){
 --       gets a random xkcd web comic
 */
 async function xkcd_rand(){
-  common.getFromAPI("http://xkcd.com/info.0.json", (jsonData) => {
+  await common.getFromAPI("http://xkcd.com/info.0.json", (jsonData) => {
     common.getFromAPI("https://xkcd.com/" + (Math.floor(Math.random(jsonData["num"]) * 100)) + "/info.0.json", (data) => {
       common.download(data["img"], data["title"]);
     });
