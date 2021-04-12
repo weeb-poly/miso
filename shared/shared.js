@@ -78,25 +78,28 @@ module.exports = { getFromAPI };
 -- 			 start of scraping with puppeteer
 */
 
-async function scrapeTags(url, tags, callback){
-
-}
-
-/*
--- NOTE: untested
--- 			 gets all the html from the
-*/
-async function grabHTML(){
+async function searchPageFor(url, evaluate , callback){
 	try{
 		const browser = await puppeteer.launch();
 		const [page] = await browser.pages();
 
+				await page.goto(url, {waitUntil: 'networkidle0'});
+				// old thing: get rid of
+				// const data = await page.evaluate(() => document.querrySelectorAll(tags).outerHTML);
+				const data = await page.evaluate(evaluate);
+				callback(data);
+
+				await browser.close();
+
 	} catch (err) {
 
 	}
-
 }
 
-async function grabAllImgTags(){
-
+/*
+-- NOTE: untested
+--       gets all the html from the
+*/
+async function grabHTML(url, callback){
+	await searchPageFor(url, "*", callback);
 }
