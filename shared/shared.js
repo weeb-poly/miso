@@ -78,22 +78,16 @@ module.exports = { getFromAPI };
 -- 			 start of scraping with puppeteer
 */
 
-async function searchPageFor(url, evaluate , callback){
-	try{
-		const browser = await puppeteer.launch();
-		const [page] = await browser.pages();
+async function pageEval(url, pageScript , callback){
+	const browser = await puppeteer.launch();
+	const page = await browser.newPage();
+	await page.goto(url);
 
-				await page.goto(url, {waitUntil: 'networkidle0'});
-				// old thing: get rid of
-				// const data = await page.evaluate(() => document.querrySelectorAll(tags).outerHTML);
-				const data = await page.evaluate(evaluate);
-				callback(data);
+	const data = await page.evaluate(pageScript);
+	callback(data);
+	// await page.screenshot({ path: 'example.png' });
 
-				await browser.close();
-
-	} catch (err) {
-
-	}
+	await browser.close();
 }
 
 /*
