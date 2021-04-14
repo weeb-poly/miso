@@ -12,13 +12,15 @@ var temp = document.getElementsByClassName("thumb-container");
 temp[temp.length - 1].querySelector("img").dataset.src;
 */
 function nhentai(url){
-  await common.scrapeTags(url, () = {
+  common.pageEval(url, () = {
     // this cursed query is for getting the number of pages that are
     var temp = document.getElementsByClassName("thumb-container");
-    temp[temp.length - 1].querySelector("img").dataset.src;
-  },(imgURL) => {
-    let pageNum = imgURL.match(/\/[0-9]+t/);
-    let newURL = imgURL.replace(/t\./, 'i.').replaceAll(/t\./ig, ".");
-    for(let i = 0; i < pageNum; i++) common.download(newURL);
+    return temp[temp.length - 1].querySelector("img").dataset.src;
+  },(data) => {
+    let dataClone = data.toString();
+    let pagenum = dataClone.match(/\/[0-9]+t/)[0].match(/[0-9]+/)[0]; // gets the total number of pages
+    download(dataClone.replace(/t\./, 'i.').replace(/t\./g, "."), "example.jpg");
+      //download(data, "example.jpg");
+    // for(let i = 0; i < pageNum; i++) common.download(newURL);
   });
 }
