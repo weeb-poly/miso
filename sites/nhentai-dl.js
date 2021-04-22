@@ -19,8 +19,9 @@ function nhentai(url){
   },(data) => {
     let dataClone = data.toString();
     let pagenum = dataClone.match(/\/[0-9]+t/)[0].match(/[0-9]+/)[0]; // gets the total number of pages
-    download(dataClone.replace(/t\./, 'i.').replace(/t\./g, "."), "example.jpg");
+    let newURL = dataClone.replace(/t\./, 'i.').replace(/t\./g, ".");
+    // download(dataClone.replace(/t\./, 'i.').replace(/t\./g, "."), "example.jpg");
       //download(data, "example.jpg");
-    // for(let i = 0; i < pageNum; i++) common.download(newURL);
+    for(let i = 0; i < pageNum; i++) common.download(newURL, newURL);
   });
 }
