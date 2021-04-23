@@ -1,16 +1,17 @@
 // TODO: use api for this
 // includes
-common = require("../shared.js")
+common = require("../shared/shared.js")
 
 function downloader(jsonData){
   let title = jsonData["safe_title"];
   let img = jsonData["img"];
-  common.download(img, title);
+  common.download(img, jsonData["title"] + jsonData["img"].match(/\.[0-9a-z]+$/i)[0]);
+
 }
 
 async function xkcd(num){
   let url = "https://xkcd.com/" + num + "/info.0.json";
-  common.getFromAPI(url, downloader);
+  await common.getFromAPI(url, downloader);
 }
 
 /*
@@ -18,7 +19,7 @@ async function xkcd(num){
 --       gets the current xkcd webcomic
 */
 async function xkcd_curr(){
-  common.getFromAPI("http://xkcd.com/info.0.json", downloader);
+  await common.getFromAPI("https://xkcd.com/info.0.json", downloader);
 }
 
 /*
@@ -26,9 +27,11 @@ async function xkcd_curr(){
 --       gets a random xkcd web comic
 */
 async function xkcd_rand(){
-  common.getFromAPI("http://xkcd.com/info.0.json", (jsonData) => {
+  await common.getFromAPI("https://xkcd.com/info.0.json", (jsonData) => {
     common.getFromAPI("https://xkcd.com/" + (Math.floor(Math.random(jsonData["num"]) * 100)) + "/info.0.json", (data) => {
-      common.download(data["img"], data["title"]);
+	common.download(data["img"], data["title"] + data["img"].match(/\.[0-9a-z]+$/i)[0]);
     });
   });
 }
+
+// TEST:
