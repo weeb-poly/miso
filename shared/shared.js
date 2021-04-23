@@ -23,7 +23,6 @@ function seededRandom(number){
 	let removeChar = (temp.length - number.toString().length) / 2;
 	return parseInt(temp.substring(removeChar, temp.length - removeChar));
 }
-module.exports = { seededRandom };
 
 /*
 -- NOTE: This does not check if the URL you are giving it is an image. use carefully
@@ -48,7 +47,6 @@ function download(url, imagename){
 
 	});
 }
-module.exports = { download };
 
 /*
 -- NOTE: untested, still need to test
@@ -71,7 +69,6 @@ async function getFromAPI(apiendpoint, callback){
 		});
 	});
 }
-module.exports = { getFromAPI };
 
 /*
 -- NOTE: untested
@@ -97,3 +94,5 @@ async function pageEval(url, pageScript , callback){
 async function grabHTML(url, callback){
 	await searchPageFor(url, "*", callback);
 }
+
+module.exports = { seededRandom, download, getFromAPI, pageEval };

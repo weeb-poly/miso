@@ -6,6 +6,6 @@ function pixiv(url){
   common.pageEval(url, () => {
     return document.querySelector("figure a img").src;
   }, (data) => {
-    common.download(data);
+    common.download(data, );
   });
 }
